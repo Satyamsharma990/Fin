@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Shield,
@@ -19,7 +19,7 @@ import { apiGetInsuranceInsights } from "@/lib/api";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default function InsuranceInsightsPage() {
+function InsuranceInsightsContent() {
   const searchParams = useSearchParams();
   const documentId = searchParams.get("documentId");
   const [data, setData] = useState<any>(null);
@@ -172,5 +172,17 @@ export default function InsuranceInsightsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function InsuranceInsightsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    }>
+      <InsuranceInsightsContent />
+    </Suspense>
   );
 }

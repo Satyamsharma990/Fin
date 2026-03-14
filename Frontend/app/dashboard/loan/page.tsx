@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Landmark, DollarSign, Calendar, Percent, TrendingUp, Loader2, AlertCircle } from "lucide-react";
 import { StatsCard } from "@/components/stats-card";
@@ -22,7 +22,7 @@ import {
   Bar,
 } from "recharts";
 
-export default function LoanAnalysisPage() {
+function LoanAnalysisContent() {
   const searchParams = useSearchParams();
   const documentId = searchParams.get("documentId");
   const [data, setData] = useState<any>(null);
@@ -194,5 +194,17 @@ export default function LoanAnalysisPage() {
         </AnalysisSummaryCard>
       )}
     </div>
+  );
+}
+
+export default function LoanAnalysisPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    }>
+      <LoanAnalysisContent />
+    </Suspense>
   );
 }
